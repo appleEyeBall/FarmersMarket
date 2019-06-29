@@ -3,4 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="buy_fill">#4D6D1AFF</color>
+    <color name="buy_stroke">#806D1AFF</color>
+    <color name="sell_fill">#8020A26D</color>
+    <color name="sell_stroke">#4D0C3323</color>
+    <color name="black">#1D181A</color>
+    <color name="rich_black">#0C0C0C</color>
 </resources>

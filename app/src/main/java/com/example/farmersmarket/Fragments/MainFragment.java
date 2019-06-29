@@ -18,13 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.farmersmarket.Activities.MainActivity;
+import com.example.farmersmarket.Helpers.DatabaseTransaction;
+import com.example.farmersmarket.Models.User;
 import com.example.farmersmarket.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -95,14 +96,20 @@ public class MainFragment extends Fragment{
                 new AuthUI.IdpConfig.FacebookBuilder().build());
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null){
+            Log.v("blow", "currentUser is Null");
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
+                            .setLogo(R.drawable.cann_img2)
                             .build(),
                     RC_SIGN_IN);
         }
         else {
+            String theName =  auth.getCurrentUser().getDisplayName();
+            Log.v("blow", "There is a current user "+ theName);
+
+
             ((MainActivity)getActivity()).switchToMapsFragment();
         }
 
@@ -113,18 +120,22 @@ public class MainFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.v("blow", "On activity result");
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 Log.v("blow", "logged in ");
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String userName = user.getDisplayName();
+                String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                if (email==null){email = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();}
                 editor.putString(getString(R.string.userName), userName).commit();
+                editor.putString(getString(R.string.email), email);
                 if (sharedPreferences.getString(getString(R.string.mission), null) == null ) {
                     showMissionDialog();
                 }
                 else {
+                    storeUserInFirestore();     // store the new user in firestore
                     ((MainActivity)getActivity()).switchToMapsFragment();
                 }
 
@@ -138,7 +149,7 @@ public class MainFragment extends Fragment{
         }
     }
 
-    void signOut(final boolean signInAgain){
+    private void signOut(final boolean signInAgain){
         editor.clear().commit();
         AuthUI.getInstance()
                 .signOut(getActivity())
@@ -150,7 +161,7 @@ public class MainFragment extends Fragment{
                 });
 
     }
-    void deleteUser(){
+    private void deleteUser(){
         editor.clear().commit();
         AuthUI.getInstance()
                 .delete(getActivity())
@@ -162,7 +173,7 @@ public class MainFragment extends Fragment{
                 });
     }
 
-    void showMissionDialog(){
+    private void showMissionDialog(){
         CharSequence first = "Consumer";
         CharSequence second = "Producer";
         CharSequence third = "Company";
@@ -186,15 +197,34 @@ public class MainFragment extends Fragment{
                         switch (i){
                             case 0:
                                 editor.putString(getString(R.string.mission), "consumer").commit();
+                                ((MainActivity)getActivity()).decideAndRemoveInventory();
                                 mainActivity.switchToMapsFragment();
+                                break;
                             case 1:
                                 editor.putString(getString(R.string.mission), "producer").commit();
+                                ((MainActivity)getActivity()).decideAndRemoveInventory();
                                 mainActivity.switchToMapsFragment();
+                                break;
                             case 2:
                                 editor.putString(getString(R.string.mission), "company").commit();
+                                ((MainActivity)getActivity()).decideAndRemoveInventory();
                                 mainActivity.switchToMapsFragment();
+                                break;
                         }
+                        storeUserInFirestore();
                     }
                 }).show();
     }
+
+   private void storeUserInFirestore(){
+        //This function stores user in firestore after log in
+        String userName = sharedPreferences.getString(getString(R.string.userName), null);
+        User user = new User(userName,
+                sharedPreferences.getString(getString(R.string.mission), null));
+
+        DatabaseTransaction databaseTransaction = new DatabaseTransaction(getActivity());
+        databaseTransaction.storeUserInDb(user);
+    }
+
+
 }

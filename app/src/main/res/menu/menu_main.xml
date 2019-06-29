@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/action_sign_out"
-        android:enabled="true"
-        android:icon="@android:drawable/ic_menu_recent_history"
-        android:title="sign out"
-        android:visible="true"></item>
+    <!--// for custom layout, do: app:actionLayout="@layout/inside_nav" in item field-->
+
+    <item android:title="">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_conversations"
+                    android:enabled="true"
+                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:title="Conversations"
+                    android:visible="true"/>
+
+                <item
+                    android:id="@+id/action_inventory"
+                    android:enabled="true"
+                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:title="Inventory"
+                    android:visible="true"/>
+
+
+                <item
+                    android:id="@+id/action_settings"
+                    android:enabled="true"
+                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:title="Settings"
+                    android:visible="true"/>
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/action_sign_out"
+                    android:enabled="true"
+                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:title="Sign out"
+                    android:visible="true"/>
+            </group>
+        </menu>
+    </item>
 
 </menu>
