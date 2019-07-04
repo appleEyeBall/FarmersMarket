@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.farmersmarket.Activities.MainActivity;
-import com.example.farmersmarket.Helpers.DatabaseTransaction;
+import com.example.farmersmarket.Helpers.UserDatabaseTransaction;
 import com.example.farmersmarket.Models.User;
 import com.example.farmersmarket.R;
 import com.firebase.ui.auth.AuthUI;
@@ -222,7 +222,7 @@ public class MainFragment extends Fragment{
         User user = new User(userName,
                 sharedPreferences.getString(getString(R.string.mission), null));
 
-        DatabaseTransaction databaseTransaction = new DatabaseTransaction(getActivity());
+        UserDatabaseTransaction databaseTransaction = new UserDatabaseTransaction(getActivity());
         databaseTransaction.storeUserInDb(user);
     }
 

@@ -12,7 +12,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -21,8 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.farmersmarket.Activities.MainActivity;
-import com.example.farmersmarket.Helpers.DatabaseTransaction;
-import com.example.farmersmarket.Models.User;
+import com.example.farmersmarket.Helpers.UserDatabaseTransaction;
 import com.example.farmersmarket.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -30,17 +28,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.maps.android.clustering.ClusterItem;
-import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,7 +73,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     SupportMapFragment mapFragment;
     GoogleMap mMap;
     FusedLocationProviderClient fusedLocationProviderClient;
-    DatabaseTransaction databaseTransaction;
+    UserDatabaseTransaction databaseTransaction;
     SharedPreferences sharedPreferences;
     Location mLocation;
 
@@ -104,10 +95,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         mapFragment = (SupportMapFragment) getChildFragmentManager().
                 findFragmentById(R.id.mapsFragment);
         v.setVisibility(View.GONE); // it will become visible when user accepts permission
+        ((MainActivity)getActivity()).getToolbar().setTitle("");
+        ((MainActivity) getActivity()).getToolbar().setBackgroundColor(getResources().getColor(R.color.transparent));
         ((MainActivity) getActivity()).getToolbar().setVisibility(View.VISIBLE);    // was invisible in sign in screen
 
         // initializations
-        databaseTransaction = new DatabaseTransaction(getActivity());   //initializing
+        databaseTransaction = new UserDatabaseTransaction(getActivity());   //initializing
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 

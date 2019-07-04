@@ -7,6 +7,13 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/action_home"
+                    android:enabled="true"
+                    android:icon="@android:drawable/ic_menu_myplaces"
+                    android:title="Home"
+                    android:visible="true"/>
+
+                <item
                     android:id="@+id/action_conversations"
                     android:enabled="true"
                     android:icon="@android:drawable/ic_menu_recent_history"
@@ -16,7 +23,7 @@
                 <item
                     android:id="@+id/action_inventory"
                     android:enabled="true"
-                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:icon="@android:drawable/ic_menu_add"
                     android:title="Inventory"
                     android:visible="true"/>
 
@@ -24,7 +31,7 @@
                 <item
                     android:id="@+id/action_settings"
                     android:enabled="true"
-                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:icon="@android:drawable/ic_menu_preferences"
                     android:title="Settings"
                     android:visible="true"/>
 

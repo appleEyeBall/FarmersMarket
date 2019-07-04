@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="strain_array">
+        <item> Hybrid </item>
+        <item> Indica </item>
+        <item> Sativa </item>
+
+    </string-array>
+
+</resources>

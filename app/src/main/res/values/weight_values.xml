@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weight_array">
+        <item> Gram </item>
+        <item> Eighth </item>
+        <item> Quarter </item>
+        <item> Ounce </item>
+
+    </string-array>
+
+</resources>

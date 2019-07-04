@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+                                <!--use constraint layout later-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/add_item_view">
+
+    <ImageView
+        android:id="@+id/item_img"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:layout_height="100dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+    <EditText
+        android:id="@+id/item_label"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignTop="@id/item_img"
+        android:layout_marginTop="120dp"
+        android:hint="Label e.g Mary Jane"
+        android:inputType="text" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/item_label"
+        android:layout_marginTop="94dp"
+        android:id="@+id/strain_spinner">
+
+    </Spinner>
+
+    <EditText
+        android:id="@+id/cbd"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_toEndOf="@id/strain_spinner"
+        android:hint="CBD e.g 20%"
+        android:layout_alignTop="@id/item_label"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="70dp"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/thc"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:hint="THC e.g 20%"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/item_label"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="70dp"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/item_flavor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/strain_spinner"
+        android:hint="Flavor e.g Pineaple"
+        android:layout_marginTop="70dp"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignTop="@id/item_flavor"
+        android:layout_marginTop="70dp"
+        android:hint="Price. e.g 50.0"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/per"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/item_flavor"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="90dp"
+        android:layout_toEndOf="@+id/item_price"
+        android:text="Per"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weight_spinner"
+        android:layout_alignTop="@id/item_flavor"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="94dp"
+        android:layout_toEndOf="@+id/per">
+    </Spinner>
+
+    <Button
+        android:id="@+id/sell_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Sell Item"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:background="@color/sell_fill"
+
+        />
+
+</RelativeLayout>

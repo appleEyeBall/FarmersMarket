@@ -7,13 +7,10 @@ public class Inventory {
     String imguri;
     int rating;
     String pricing;
-    String[] feedbacks;
-
-    public Inventory(String label, String pricing){
-        this.label = label;
-        this.pricing = pricing;
-    }
-
+    String weightType;
+    String cbd;
+    String thc;
+    boolean inStock;
                     // Setters
 
     public void setLabel(String label) {
@@ -40,11 +37,23 @@ public class Inventory {
         this.pricing = pricing;
     }
 
-    public void setFeedbacks(String[] feedbacks) {
-        this.feedbacks = feedbacks;
+    public void setWeightType(String weightType) {
+        this.weightType = weightType;
     }
 
-                        // Getters
+    public void setCbd(String cbd) {
+        this.cbd = cbd;
+    }
+
+    public void setThc(String thc) {
+        this.thc = thc;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    // Getters
     public String getLabel() {
         return label;
     }
@@ -69,7 +78,19 @@ public class Inventory {
         return pricing;
     }
 
-    public String[] getFeedbacks() {
-        return feedbacks;
+    public String getWeightType() {
+        return weightType;
+    }
+
+    public String getCbd() {
+        return cbd;
+    }
+
+    public String getThc() {
+        return thc;
+    }
+
+    public boolean getInStock(){
+        return inStock;
     }
 }

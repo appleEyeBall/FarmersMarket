@@ -16,10 +16,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.farmersmarket.Fragments.ConversationsFragment;
 import com.example.farmersmarket.Fragments.InventoryFragment;
 import com.example.farmersmarket.Fragments.MainFragment;
 import com.example.farmersmarket.Fragments.MapsFragment;
-import com.example.farmersmarket.Helpers.DatabaseTransaction;
+import com.example.farmersmarket.Fragments.SettingsFragment;
+import com.example.farmersmarket.Helpers.UserDatabaseTransaction;
 import com.example.farmersmarket.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     ConstraintLayout statusColumn;
+    MapsFragment mapsFragment;
+    InventoryFragment inventoryFragment;
+    SettingsFragment settingsFragment;
+    ConversationsFragment conversationsFragment;
 
     public NavigationView nv;
 
@@ -47,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        mapsFragment = MapsFragment.newInstance("a","b");
+        inventoryFragment = InventoryFragment.newInstance("a", "b");
+        settingsFragment = SettingsFragment.newInstance("a", "b");
+        conversationsFragment = ConversationsFragment.newInstance("a", "b");
 
         Fragment mainFragment = fragmentManager.findFragmentById(R.id.mainContainer);
         //MainFragment is the first fragments that loads. it contains the sign in screen
@@ -72,19 +83,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Bellow are methods that will be called from other fragments
-    public void switchToMapsFragment(){
-        fragmentManager = getSupportFragmentManager();
-        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
-        if (existingFragment == null){
-            MapsFragment mapsFragment = MapsFragment.newInstance("a","b");
-            fragmentManager.beginTransaction().add(R.id.mainContainer, mapsFragment).commit();
-        }
-        else {
-            MapsFragment mapsFragment = MapsFragment.newInstance("a","b");
-            fragmentManager.beginTransaction().replace(R.id.mainContainer, mapsFragment).commit();
-        }
-    }
+    // Bellow are public methods
     public void switchToMainFragment(){
         fragmentManager = getSupportFragmentManager();
         Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
@@ -93,22 +92,113 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.mainContainer, mainFragment).commit();
         }
         else {
-            MainFragment mainFragment = MainFragment.newInstance("a","b");
-            fragmentManager.beginTransaction().replace(R.id.mainContainer, mainFragment).commit();
+            if(!(existingFragment instanceof MainFragment)){
+                MainFragment mainFragment = MainFragment.newInstance("a","b");
+                fragmentManager.beginTransaction().replace(R.id.mainContainer, mainFragment).commit();
+            }
         }
     }
+
+    public void switchToMapsFragment(){
+        fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
+        if (existingFragment == null){
+//            MapsFragment mapsFragment = MapsFragment.newInstance("a","b");
+            fragmentManager.beginTransaction().addToBackStack(null)
+                    .add(R.id.mainContainer, mapsFragment).commit();
+        }
+        else {
+            if (!(existingFragment instanceof MapsFragment)){
+                // let all fragments be stored in fragmentManager so we can
+                // easily attach and detach in navigation drawer
+                //Notice the add and detach alternation
+                fragmentManager.beginTransaction()
+                        .add(R.id.mainContainer, inventoryFragment)
+                        .detach(inventoryFragment)
+                        .add(R.id.mainContainer, settingsFragment)
+                        .detach(settingsFragment)
+                        .add(R.id.mainContainer,conversationsFragment)
+                        .detach(conversationsFragment)
+                        .replace(R.id.mainContainer, mapsFragment).commit();
+            }
+        }
+    }
+
+
+
     public void switchToInventoryFragment(){
         fragmentManager = getSupportFragmentManager();
         Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
         if (existingFragment == null){
-            InventoryFragment inventoryFragment = InventoryFragment.newInstance("a","b");
             fragmentManager.beginTransaction().add(R.id.mainContainer, inventoryFragment).commit();
         }
         else {
-            InventoryFragment inventoryFragment = InventoryFragment.newInstance("a","b");
-            fragmentManager.beginTransaction().replace(R.id.mainContainer, inventoryFragment).commit();
+            if (!(existingFragment instanceof InventoryFragment)){
+                fragmentManager.beginTransaction().replace(R.id.mainContainer, inventoryFragment).commit();
+            }
         }
     }
+
+
+    /* this doesn't make the fragment reload
+        we only have to use the "switch" functions once.
+        and that is on initial launch
+        after that, we use the "attach" function to switch between fragments from the nav drawer
+    */
+    public void attachMapsFragment(){
+        fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
+        if ( existingFragment!= null){
+            fragmentManager.beginTransaction().detach(existingFragment).commit();
+            fragmentManager.beginTransaction().attach(mapsFragment).commit();
+            Log.v("blow", "added maps");
+        }
+        if (existingFragment == null){
+            Log.v("blow", "maps exists");
+        }
+    }
+
+    public void attachInventoryFragment(){
+        // this doesn't make the fragment reload
+        fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
+        if ( existingFragment!= null){
+            fragmentManager.beginTransaction().detach(existingFragment).commit();
+            fragmentManager.beginTransaction().attach(inventoryFragment).commit();
+//            fragmentManager.beginTransaction().replace(R.id.mainContainer, inventoryFragment).commit();
+            Log.v("blow", "added inventory");
+        }
+        if (existingFragment == null){
+            Log.v("blow", "inventory exists");
+        }
+    }
+    public void attachConversationFragment(){
+        // this doesn't make the fragment reload
+        fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
+        if ( existingFragment!= null){
+            fragmentManager.beginTransaction().detach(existingFragment).commit();
+            fragmentManager.beginTransaction().attach(conversationsFragment).commit();
+            Log.v("blow", "added inventory");
+        }
+        if (existingFragment == null){
+            Log.v("blow", "inventory exists");
+        }
+    }
+    public void attachSettingsFragment(){
+        // this doesn't make the fragment reload
+        fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentById(R.id.mainContainer);
+        if ( existingFragment!= null){
+            fragmentManager.beginTransaction().detach(existingFragment).commit();
+            fragmentManager.beginTransaction().attach(settingsFragment).commit();
+            Log.v("blow", "added inventory");
+        }
+        if (existingFragment == null){
+            Log.v("blow", "inventory exists");
+        }
+    }
+
 
     public Toolbar getToolbar(){
         return this.toolbar;
@@ -137,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         Log.e("blow", "signed out");
                         // delete from firestore db
-                        DatabaseTransaction databaseTransaction = new DatabaseTransaction(MainActivity.this);
+                        UserDatabaseTransaction databaseTransaction = new UserDatabaseTransaction(MainActivity.this);
                         databaseTransaction.deleteUserFromDb();
                         //delete from firebase auth
                         deleteUser();
@@ -158,16 +248,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                Toast.makeText(getApplicationContext(),"works "+ String.valueOf(id) , Toast.LENGTH_SHORT).show();
                 switch(id) {
+                    case R.id.action_home:
+                        attachMapsFragment();
+                        break;
+                    case R.id.action_inventory:
+                        attachInventoryFragment();
+                        break;
+                    case R.id.action_settings:
+                        attachSettingsFragment();
+                        break;
+                    case R.id.action_conversations:
+                        attachConversationFragment();
+                        break;
                     case R.id.action_sign_out:
 //                        deleteUser();
                         signOut(true);
                         Toast.makeText(MainActivity.this, "Signed out",Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.action_inventory:
-                        switchToInventoryFragment();
-                        break;
+
                 }
                 drawerLayout.closeDrawers();
                 return true;
@@ -185,6 +284,4 @@ public class MainActivity extends AppCompatActivity {
             nv.getMenu().removeItem(R.id.action_inventory);
         }
     }
-
-
 }

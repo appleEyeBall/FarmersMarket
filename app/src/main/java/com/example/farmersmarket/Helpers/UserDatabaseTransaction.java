@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.farmersmarket.Fragments.MainFragment;
+import com.example.farmersmarket.Models.Inventory;
 import com.example.farmersmarket.Models.User;
 import com.example.farmersmarket.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,14 +41,14 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 // NOTE: THIS WHOLE CLASS RUNS ASYNCRONOUSLY
-public class DatabaseTransaction{
+public class UserDatabaseTransaction {
     FirebaseFirestore db;
     Activity activity;
     SharedPreferences sharedPreferences;
     List<User> userList = new ArrayList<User>();
     ClusterManager<User> mClusterManager;
 
-    public DatabaseTransaction(Activity activity){
+    public UserDatabaseTransaction(Activity activity){
         this.activity = activity;
         db = FirebaseFirestore.getInstance();
         sharedPreferences = this.activity.getPreferences(Context.MODE_PRIVATE);
@@ -89,16 +90,6 @@ public class DatabaseTransaction{
         }
     }
 
-    String getFirstName(){
-        String firstName = "";
-        int endIndex;
-        String fullName = sharedPreferences.getString(activity.getString(R.string.userName), null);
-        if (fullName != null){
-            endIndex = fullName.lastIndexOf(" "); // last index because there could be a space in first name
-            firstName = fullName.substring(0,endIndex);
-        }
-        return firstName;
-    }
     // updateUser is an overloaded method
     public void updateUser(String field, double value){
         String email = sharedPreferences.getString(activity.getString(R.string.email), null);
@@ -113,6 +104,16 @@ public class DatabaseTransaction{
         userRef.update(field, value);
     }
 
+    private String getFirstName(){
+        String firstName = "";
+        int endIndex;
+        String fullName = sharedPreferences.getString(activity.getString(R.string.userName), null);
+        if (fullName != null){
+            endIndex = fullName.lastIndexOf(" "); // last index because there could be a space in first name
+            firstName = fullName.substring(0,endIndex);
+        }
+        return firstName;
+    }
 
     public void getUsersWithinRange(final Location location, HashMap<String, Double> range, final GoogleMap map){
         Log.v("blow", "getUsersWithinRange triggered");
@@ -231,6 +232,6 @@ public class DatabaseTransaction{
 
         mClusterManager.cluster();
         mClusterManager.setRenderer(new MarkerClusterRenderer(activity, map, mClusterManager));
-
     }
+
 }
